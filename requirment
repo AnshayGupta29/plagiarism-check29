@@ -1,0 +1,8 @@
+pandas==1.4.2
+flask==2.2.2
+sklearn==0
+sklearn2==0.0.13
+numpy==1.23.1
+matplot==3.5.2
+cosine-similarity==0.1.2
+urllib==1.26.11

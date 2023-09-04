@@ -1,0 +1,3 @@
+Uploading Files with PHP
+remote server using a Simple HTML form and PHP. You can upload any kind of file like images, videos, ZIP files, Microsoft Office documents, PDFs, as well as executables files and a wide range of other file types.
+sasa ntacopy hii in one text file na pia niweke
