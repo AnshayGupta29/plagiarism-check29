@@ -1,76 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-    />
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
-      rel="stylesheet"
-    />
-       <title>Plagiarism</title>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plagiarism Report</title>
 
-    <!-- Showcase -->
-    <section class="text-light p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
-      <div class="container">
-        <div class="align-items-center justify-content-between">
-          <div>
-			<table class="table table-bordered">
-			  <thead style="position: sticky;top: 0" class="bg-danger text-light">
-				<tr>
-				<th colspan="2" class="text-center">
-				<h1>PLAGIARISM REPORT</h1>
-				</th>
-				</tr>
-				<tr>
-				  <th scope="col" width="40%"><h2>File Name</h2></th>
-				  <th scope="col" width="60%"><h2>Percantage</h2></th>
-				</tr>
-			  <thead>
-			  <tbody>
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
+  <style>
+    /* Background gradient animation */
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .report-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      width: 90%;
+      max-width: 900px;
+      color: #fff;
+    }
+
+    .report-card h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .table thead th {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .table td {
+      vertical-align: middle;
+      color: #fff;
+    }
+
+    .progress {
+      height: 25px;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .progress-bar {
+      transition: width 0.6s ease;
+      font-weight: 600;
+    }
+
+    .table-rounded {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 576px) {
+      .report-card {
+        padding: 20px;
+      }
+
+      .table th, .table td {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="report-card">
+    <h1><i class="bi bi-file-earmark-text-fill"></i> Plagiarism Report</h1>
+
+    <table class="table table-hover table-bordered table-rounded">
+      <thead>
+        <tr class="text-center">
+          <th>File Comparison</th>
+          <th>Similarity</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for item in data %}
+        {% set percent = item[2]*100 %}
         <tr>
-          <td>{{item[0]}} similar to {{item[1]}}</td>
-          <td>{{item[2]*100}}%</td>
+          <td>
+            {{ item[0] }}<br>
+            <small class="text-light">similar to</small><br>
+            <strong>{{ item[1] }}</strong>
+          </td>
+          <td>
+            <div class="progress" title="{{ percent | round(1) }}%">
+              <div 
+                class="progress-bar 
+                  {% if percent >= 70 %}bg-danger
+                  {% elif percent >= 40 %}bg-warning
+                  {% else %}bg-success
+                  {% endif %}" 
+                role="progressbar" 
+                style="width: {{ percent }}%;" 
+                aria-valuenow="{{ percent }}" 
+                aria-valuemin="0" 
+                aria-valuemax="100">
+              </div>
+            </div>
+          </td>
         </tr>
         {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-
-				<!-- <tr>
-				  <td>
-					{{filename}}
-				  </td>
-				  <td>
-					<div class="progress">
-					#   <div class="progress-bar <?php if($value>=70){echo 'bg-danger';} else if($value>=40){echo 'bg-warning';} else{ echo 'bg-success';} ?>" role="progressbar" style="width: <?php echo $value; ?>%;" aria-valuenow="<?php echo $value; ?>" aria-valuemin="0" aria-valuemax="100">{{data}}%</div> -->
-					<!-- </div>
-				  </td>
-				</tr> -->
-
-			  </tbody>
-			</table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-      crossorigin="anonymous">
-	</script>
-  </body>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
